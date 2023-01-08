@@ -1,0 +1,26 @@
+From ubuntu:20.04
+
+RUN apt update && apt upgrade
+RUN apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
+	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+ENV LANG en_US.utf8
+
+RUN apt update && apt install -y default-jre
+
+RUN apt update && apt install -y wget
+
+RUN apt update && apt install -y gnupg gnupg2 gnupg1
+
+RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+
+RUN apt update && apt install -y apt-transport-https
+
+RUN echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-8.x.list
+
+RUN apt update && apt install -y logstash
+
+RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+
+RUN echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-6.x.list
+
+RUN apt update && apt install -y elasticsearch
